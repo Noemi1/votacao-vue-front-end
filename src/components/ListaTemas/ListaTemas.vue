@@ -47,7 +47,7 @@
             <div
                 v-for="tema in temasAtivos"
                 :key="tema.id"
-                class="col-6 sm:col-6 md:col-6 lg:col-4 xl:col-3"
+                class="col-6 sm:col-6 md:col-6 lg:col-4 xl:col-4 cursor-pointer"
             >
                 <Card class="h-full hover:shadow-3 transition-all duration-300">
                     <template #header>
@@ -68,23 +68,25 @@
                         </div>
                     </template>
                     <template #title>
-                        <h3 class="text-xl font-semibold  mb-2 line-height-1-2">
+                        <h3 class="text-xl font-semibold  mb-2 ">
                             {{ tema.nome }}
                         </h3>
                     </template>
                     <template #content>
-                        <p class=" mb-3 line-height-1-5">
-                            {{ truncateDescription(tema.descricao, 120) }}
-                        </p>
-                        <div class="flex align-items-center justify-content-between text-sm  mb-3">
-                            <span>
-                                <i class="pi pi-calendar mr-1"></i>
-                                {{ formatDate(tema.created_at) }}
-                            </span>
-                            <span v-if="tema.totalVotos > 0">
-                                <i class="pi pi-heart mr-1"></i>
-                                {{ tema.totalVotos }} voto{{ tema.totalVotos !== 1 ? 's' : '' }}
-                            </span>
+                        <div class="flex flex-column h-full">
+                            <p class=" mb-3 line-height-1-5">
+                                {{ truncateDescription(tema.descricao, 120) }}
+                            </p>
+                            <div class="mt-auto flex align-items-center justify-content-between text-sm">
+                                <span>
+                                    <i class="pi pi-calendar mr-1"></i>
+                                    {{ formatDate(tema.created_at) }}
+                                </span>
+                                <span v-if="tema.totalVotos > 0">
+                                    <i class="pi pi-heart mr-1"></i>
+                                    {{ tema.totalVotos }} voto{{ tema.totalVotos !== 1 ? 's' : '' }}
+                                </span>
+                            </div>
                         </div>
                     </template>
                     <template #footer>

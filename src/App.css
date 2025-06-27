@@ -280,6 +280,9 @@ html[data-theme="light"] #app {
     display: flex;
     flex-direction: column;
 }
+.p-card-content { 
+    height: 100%;
+}
 .p-card-footer {
     margin-top: auto;
     padding-top: 10px;

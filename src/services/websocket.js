@@ -26,7 +26,6 @@ class WebSocketService {
                 reconnectionDelay: 1000,
                 reconnectionDelayMax: 5000,
                 maxReconnectionAttempts: this.maxConnectionAttempts,
-                forceNew: true,
                 upgrade: true,
                 rememberUpgrade: true,
             });
@@ -83,18 +82,18 @@ class WebSocketService {
             });
 
             this.socket.on('temaInativado', (data) => {
-                console.log('🚫 Tema inativado:', data);
+                console.log('🚫 Tema inativado recebido via WebSocket:', data);
                 this.emit('temaInativado', data);
             });
 
             this.socket.on('temaAtivado', (data) => {
-                console.log('✅ Tema ativado:', data);
+                console.log('✅ Tema ativado recebido via WebSocket:', data);
                 this.emit('temaAtivado', data);
             });
 
             this.socket.on('votoRegistrado', (data) => {
                 console.log('🗳️ Voto registrado:', data);
-                // this.emit('votoRegistrado', data);
+                this.emit('votoRegistrado', data);
             });
 
         } catch (error) {
@@ -116,6 +115,7 @@ class WebSocketService {
             this.listeners.set(event, []);
         }
         this.listeners.get(event).push(callback);
+        console.log(`📝 Listener registrado para evento "${event}". Total: ${this.listeners.get(event).length}`);
     }
 
     // Método para remover listeners
@@ -125,6 +125,7 @@ class WebSocketService {
             const index = callbacks.indexOf(callback);
             if (index > -1) {
                 callbacks.splice(index, 1);
+                console.log(`🗑️ Listener removido para evento "${event}". Total restante: ${callbacks.length}`);
             }
         }
     }
@@ -132,8 +133,11 @@ class WebSocketService {
     // Método para emitir eventos internos
     emit(event, data) {
         if (this.listeners.has(event)) {
-            this.listeners.get(event).forEach(callback => {
+            const callbacks = this.listeners.get(event);
+            console.log(`📡 Emitindo evento "${event}" para ${callbacks.length} listeners`);
+            callbacks.forEach((callback, index) => {
                 try {
+                    console.log(`📡 Executando callback ${index + 1} para evento "${event}"`);
                     callback(data);
                 } catch (error) {
                     console.error(`Erro no callback do evento ${event}:`, error);

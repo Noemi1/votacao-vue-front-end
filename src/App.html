@@ -2,8 +2,8 @@
     <Toast />
     <!-- Header -->
     
-    <div class="card shadow-lg">
-        <Menubar :model="items" class="bg-gradient-to-r from-fiap-pink-50 to-fiap-pink-100">
+    <div class="card shadow-md">
+        <Menubar :model="items">
             <template #start>
                 <img 
                     src="./assets/logo-fiap.png" 
@@ -58,7 +58,6 @@
         <div v-if="currentView === 'temas'" class="space-y-6">
             <ListaTemas
                 ref="listaTemas"
-                @votar="handleVotar"
                 @ver-detalhes="handleVerDetalhes"
             />
         </div>
@@ -67,7 +66,6 @@
             <DetalhesTema
                 :tema="selectedTema"
                 @voltar="currentView = 'temas'"
-                @votar="handleVotar"
                 @tema-atualizado="handleTemaAtualizado"
             />
         </div>

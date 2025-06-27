@@ -28,8 +28,8 @@ export default {
         };
     },
     async mounted() {
-        // Conectar ao WebSocket
-        websocketService.connect();
+        // WebSocket já está conectado pelo App.js
+        // websocketService.connect();
         
         // Configurar listeners do WebSocket
         this.setupWebSocketListeners();
@@ -255,7 +255,13 @@ export default {
                 // Atualizar dados
                 await this.carregarDados();
 
-                this.$emit("votar", this.tema);
+                // Toast local para feedback imediato
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Voto registrado!",
+                    detail: `Você votou em "${this.tema.nome}"`,
+                    life: 3000,
+                });
             } catch (error) {
                 const message =
                     error.response?.data?.message || "Erro ao registrar voto";

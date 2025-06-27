@@ -49,13 +49,6 @@
             responsiveLayout="scroll"
             class="p-datatable-sm admin-table"
         >
-            <Column
-                field="id"
-                header="ID"
-                sortable
-                style="width: 80px"
-            ></Column>
-
             <Column field="nome" header="Nome" sortable>
                 <template #body="{ data }">
                     <div class="flex align-items-center">
@@ -89,11 +82,11 @@
                 </template>
             </Column>
 
-            <Column field="inativado" header="Status" sortable>
+            <Column field="ativo" header="Status" sortable>
                 <template #body="{ data }">
                     <Tag
-                        :value="data.inativado ? 'Inativo' : 'Ativo'"
-                        :severity="data.inativado ? 'danger' : 'success'"
+                        :value="data.ativo ? 'Ativo' : 'Inativo'"
+                        :severity="data.ativo ? 'success' : 'danger'"
                     />
                 </template>
             </Column>
@@ -118,18 +111,18 @@
                             class="action-button"
                         />
                         <Button
-                            v-if="!data.inativado"
-                            icon="pi pi-ban"
+                            v-if="data.ativo"
+                            icon="pi pi-lock"
                             text
                             size="small"
                             severity="danger"
                             @click="inativarTema(data)"
-                            v-tooltip.top="'Inativar'"
+                            v-tooltip.top="'Desativar'"
                             class="action-button"
                         />
                         <Button
                             v-else
-                            icon="pi pi-check"
+                            icon="pi pi-lock-open"
                             text
                             size="small"
                             severity="success"

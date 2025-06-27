@@ -23,8 +23,8 @@ export default {
         };
     },
     async mounted() {
-        // Conectar ao WebSocket
-        websocketService.connect();
+        // WebSocket já está conectado pelo App.js
+        // websocketService.connect();
         
         // Configurar listeners do WebSocket
         this.setupWebSocketListeners();
@@ -73,12 +73,6 @@ export default {
         handleTemaCriado(novoTema) {
             console.log('🆕 Novo tema recebido via WebSocket (Admin):', novoTema);
             this.temas.unshift(novoTema);
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Novo Tema',
-                detail: `Tema "${novoTema.nome}" foi criado!`,
-                life: 3000
-            });
         },
         
         handleTemaAtualizado(temaAtualizado) {
@@ -92,40 +86,22 @@ export default {
                     this.temaSelecionado = { ...this.temaSelecionado, ...temaAtualizado };
                 }
             }
-            this.$toast.add({
-                severity: 'info',
-                summary: 'Tema Atualizado',
-                detail: `Tema "${temaAtualizado.nome}" foi atualizado!`,
-                life: 3000
-            });
         },
         
-        handleTemaInativado(data) {
-            console.log('🚫 Tema inativado via WebSocket (Admin):', data);
-            const tema = this.temas.find(t => t.id === data.id);
-            if (tema) {
-                tema.inativado = true;
+        handleTemaInativado(temaAtualizado) {
+            console.log('🚫 Tema inativado via WebSocket (Admin):', temaAtualizado);
+            const index = this.temas.findIndex(t => t.id === temaAtualizado.id);
+            if (index !== -1) {
+                this.temas[index] = { ...this.temas[index], ...temaAtualizado };
             }
-            this.$toast.add({
-                severity: 'warn',
-                summary: 'Tema Inativado',
-                detail: 'Um tema foi inativado.',
-                life: 3000
-            });
         },
         
-        handleTemaAtivado(data) {
-            console.log('✅ Tema ativado via WebSocket (Admin):', data);
-            const tema = this.temas.find(t => t.id === data.id);
-            if (tema) {
-                tema.inativado = false;
+        handleTemaAtivado(temaAtualizado) {
+            console.log('✅ Tema ativado via WebSocket (Admin):', temaAtualizado);
+            const index = this.temas.findIndex(t => t.id === temaAtualizado.id);
+            if (index !== -1) {
+                this.temas[index] = { ...this.temas[index], ...temaAtualizado };
             }
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Tema Ativado',
-                detail: 'Um tema foi ativado.',
-                life: 3000
-            });
         },
 
         async carregarTemas() {
@@ -209,10 +185,7 @@ export default {
                 }
 
                 if (this.editando) {
-                    const temaAtualizado = await api.updateTema(this.temaSelecionado.id, this.form);
-                    
-                    // Emitir evento WebSocket para notificar outros clientes
-                    websocketService.emitToServer('temaAtualizado', temaAtualizado.data);
+                    await api.updateTema(this.temaSelecionado.id, this.form);
                     
                     this.$toast.add({
                         severity: "success",
@@ -221,10 +194,7 @@ export default {
                         life: 3000,
                     });
                 } else {
-                    const novoTema = await api.createTema(this.form);
-                    
-                    // Emitir evento WebSocket para notificar outros clientes
-                    websocketService.emitToServer('temaCriado', novoTema.data);
+                    await api.createTema(this.form);
                     
                     this.$toast.add({
                         severity: "success",
@@ -253,10 +223,6 @@ export default {
         async inativarTema(tema) {
             try {
                 await api.inativarTema(tema.id);
-                tema.inativado = true;
-                
-                // Emitir evento WebSocket para notificar outros clientes
-                websocketService.emitToServer('temaInativado', { id: tema.id });
                 
                 this.$toast.add({
                     severity: "success",
@@ -279,10 +245,6 @@ export default {
         async ativarTema(tema) {
             try {
                 await api.ativarTema(tema.id);
-                tema.inativado = false;
-                
-                // Emitir evento WebSocket para notificar outros clientes
-                websocketService.emitToServer('temaAtivado', { id: tema.id });
                 
                 this.$toast.add({
                     severity: "success",
@@ -318,7 +280,32 @@ export default {
         },
 
         formatDate(dateString) {
-            return moment(dateString).format("DD/MM/YYYY [às] HH[h]mm");
+            if (moment(dateString).isSame(moment(), 'day')) 
+            {
+                return moment(dateString).format("[Hoje] [às] HH[h]mm");
+            }
+            else if (moment(dateString).date().startOf('day') == moment().subtract(1, 'days').startOf('day')) 
+            {
+                    return moment(dateString).format("[Ontem] [às] HH[h]mm");
+            }
+            else if (moment(dateString).date().startOf('day') == moment().subtract(2, 'days').startOf('day')) 
+            {
+                    return moment(dateString).format("[Anteontem] [às] HH[h]mm");
+            }
+            else if (moment(dateString).week() == moment().week()
+                    && moment(dateString).month() == moment().month() 
+                    && moment(dateString).year() == moment().year()) 
+            {
+                return moment(dateString).format("EEE [às] HH[h]mm");
+            } 
+            else if (moment(dateString).month() == moment().month() 
+                && moment(dateString).year() == moment().year()) 
+            {
+                return moment(dateString).format("DD [de] MMM [às] HH[h]mm");
+            } 
+            else {
+                return moment(dateString).format("DD/MM/YYYY [às] HH[h]mm");
+            }
         },
     },
 };

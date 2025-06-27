@@ -32,9 +32,8 @@ export default {
         },
     },
     async mounted() {
-        console.log('mounted');
-        // Conectar ao WebSocket
-        websocketService.connect();
+        // WebSocket já está conectado pelo App.js
+        // websocketService.connect();
         
         // Configurar listeners do WebSocket
         this.setupWebSocketListeners();
@@ -87,12 +86,6 @@ export default {
         handleTemaCriado(novoTema) {
             console.log('🆕 Novo tema recebido via WebSocket:', novoTema);
             this.temas.unshift(novoTema);
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Novo Tema',
-                detail: `Tema "${novoTema.nome}" foi criado!`,
-                life: 3000
-            });
         },
         
         handleTemaAtualizado(temaAtualizado) {
@@ -101,12 +94,6 @@ export default {
             if (index !== -1) {
                 this.temas[index] = { ...this.temas[index], ...temaAtualizado };
             }
-            this.$toast.add({
-                severity: 'info',
-                summary: 'Tema Atualizado',
-                detail: `Tema "${temaAtualizado.nome}" foi atualizado!`,
-                life: 3000
-            });
         },
         
         handleTemaInativado(data) {
@@ -115,12 +102,6 @@ export default {
             if (tema) {
                 tema.inativado = true;
             }
-            this.$toast.add({
-                severity: 'warn',
-                summary: 'Tema Inativado',
-                detail: 'Um tema foi inativado.',
-                life: 3000
-            });
         },
         
         handleTemaAtivado(data) {
@@ -129,24 +110,12 @@ export default {
             if (tema) {
                 tema.inativado = false;
             }
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Tema Ativado',
-                detail: 'Um tema foi ativado.',
-                life: 3000
-            });
         },
         
         handleVotoRegistrado(data) {
             console.log('🗳️ Voto registrado via WebSocket:', data);
             // Atualizar o total de votos do tema
             this.atualizarTotalVotos(data.idTema);
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Voto Registrado',
-                detail: 'Seu voto foi registrado com sucesso!',
-                life: 2000
-            });
         },
         
         async atualizarTotalVotos(idTema) {
@@ -213,7 +182,13 @@ export default {
                     tema.totalVotos = response.data[0].total;
                 }
 
-                this.$emit("votar", tema);
+                // Toast local para feedback imediato
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Voto registrado!",
+                    detail: `Você votou em "${tema.nome}"`,
+                    life: 3000,
+                });
             } catch (error) {
                 const message =
                     error.response?.data?.message || "Erro ao registrar voto";

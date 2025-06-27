@@ -82,14 +82,6 @@ export default {
             html.offsetHeight;
         },
 
-        handleVotar(tema) {
-            this.$toast.add({
-                severity: "success",
-                summary: "Voto registrado!",
-                detail: `Você votou em "${tema.nome}"`,
-                life: 3000,
-            });
-        },
         handleVerDetalhes(tema) {
             this.selectedTema = tema;
             this.currentView = "detalhes";
