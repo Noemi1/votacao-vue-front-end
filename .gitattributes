@@ -1,0 +1,27 @@
+# Configurações globais de codificação
+* text=auto eol=lf
+
+# Arquivos específicos
+*.js text eol=lf
+*.vue text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+
+# Arquivos de configuração
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.editorconfig text eol=lf 

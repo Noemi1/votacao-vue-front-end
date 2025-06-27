@@ -1,0 +1,79 @@
+<div id="app" class="min-h-screen ">
+    <Toast />
+    <!-- Header -->
+    
+    <div class="card shadow-lg">
+        <Menubar :model="items" class="bg-gradient-to-r from-fiap-pink-50 to-fiap-pink-100">
+            <template #start>
+                <img 
+                    src="./assets/logo-fiap.png" 
+                    alt="Logo FIAP" 
+                    class="h-8 w-auto"
+                />
+            </template>
+            <template #item="{ item, props, hasSubmenu, root }">
+                <a v-ripple class="flex items-center px-4 py-2 rounded-lg hover:bg-fiap-pink-200 transition-colors" v-bind="props.action">
+                    <span >{{ item.label }}</span>
+                    <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-2': root }" :value="item.badge" />
+                    <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis  text-xs p-1">
+                        {{ item.shortcut }}
+                    </span>
+                    <i v-if="hasSubmenu" :class="['pi pi-angle-down ml-auto', { 'pi-angle-down': root, 'pi-angle-right': !root }]"></i>
+                </a>
+            </template>
+            <template #end>
+                <div class="flex items-center gap-2">
+                    <!-- WebSocket Status Indicator -->
+                    <div class="flex items-center gap-1">
+                        <div 
+                            :class="[
+                                'w-2 h-2 rounded-full',
+                                websocketService?.connected ? 'bg-green-500' : 'bg-red-500'
+                            ]"
+                            :title="websocketService?.connected ? 'WebSocket Conectado' : 'WebSocket Desconectado'"
+                        ></div>
+                        <span class="text-xs ">
+                            {{ websocketService?.connected ? 'Light Mode' : 'Dark Mode' }}
+                        </span>
+                    </div>
+                    
+                    <Button
+                        :icon="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
+                        @click="toggleDarkMode"
+                        :class="isDarkMode ? 'p-button-secondary' : 'p-button-primary'"
+                        :title="isDarkMode ? 'Modo Claro' : 'Modo Escuro'"
+                        text
+                        rounded
+                    />
+                    <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+                </div>
+            </template>
+        </Menubar>
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6 min-h-screen">
+        <!-- Lista de Temas -->
+        <div v-if="currentView === 'temas'" class="space-y-6">
+            <ListaTemas
+                ref="listaTemas"
+                @votar="handleVotar"
+                @ver-detalhes="handleVerDetalhes"
+            />
+        </div>
+        <!-- Detalhes do Tema -->
+        <div v-if="currentView === 'detalhes'" class="space-y-6">
+            <DetalhesTema
+                :tema="selectedTema"
+                @voltar="currentView = 'temas'"
+                @votar="handleVotar"
+                @tema-atualizado="handleTemaAtualizado"
+            />
+        </div>
+        <!-- Painel Administracao -->
+        <div v-if="currentView === 'admin'" class="space-y-6">
+            <PainelAdministracao @voltar="currentView = 'temas'" />
+        </div>
+    </div>
+</div>

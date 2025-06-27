@@ -1,0 +1,278 @@
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* Variáveis CSS para temas */
+:root {
+    --bg-primary: #f8f9fa;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --scrollbar-track: #f1f1f1;
+    --scrollbar-thumb: #888;
+    --scrollbar-thumb-hover: #555;
+    
+    /* FIAP Pink Theme - Paleta Profissional Melhorada */
+    --fiap-pink-50: #fdf2f8;
+    --fiap-pink-100: #fce7f3;
+    --fiap-pink-200: #fbcfe8;
+    --fiap-pink-300: #f9a8d4;
+    --fiap-pink-400: #f472b6;
+    --fiap-pink-500: #ec4899;
+    --fiap-pink-600: #db2777;
+    --fiap-pink-700: #be185d;
+    --fiap-pink-800: #9d174d;
+    --fiap-pink-900: #831843;
+    --fiap-pink-950: #500724;
+    
+    /* Cores principais para uso */
+    --pink-primary: var(--fiap-pink-500);
+    --pink-light: var(--fiap-pink-300);
+    --pink-dark: var(--fiap-pink-700);
+    --pink-accent: rgba(236, 72, 153, 0.15);
+    --pink-gradient: linear-gradient(135deg, var(--fiap-pink-500), var(--fiap-pink-700));
+}
+
+/* Dark mode */
+.dark {
+    --bg-primary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --border-color: #404040;
+    --card-bg: #2d2d2d;
+    --scrollbar-track: #2a2a2a;
+    --scrollbar-thumb: #666;
+    --scrollbar-thumb-hover: #888;
+    
+    /* Ajustes para dark mode com tema rosa */
+    --pink-accent: rgba(236, 72, 153, 0.15);
+    --pink-gradient: linear-gradient(135deg, var(--fiap-pink-500), var(--fiap-pink-700));
+}
+
+#app {
+    font-family: "Roboto", Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode para body e html */
+.dark body,
+.dark #app {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Garantir que o tema seja aplicado corretamente */
+html[data-theme="dark"] body,
+html[data-theme="dark"] #app {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+html[data-theme="light"] body,
+html[data-theme="light"] #app {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* Transições suaves para mudança de tema */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Estilos específicos para dark mode */
+.dark .p-card {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    border-left: 4px solid var(--pink-primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dark .p-card:hover {
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.25);
+}
+
+.dark .p-inputtext {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark .p-inputtext:focus {
+    border-color: var(--pink-primary);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+}
+
+.dark .p-menubar {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(236, 72, 153, 0.03));
+    border-bottom: 3px solid var(--pink-primary);
+    box-shadow: 0 2px 10px rgba(236, 72, 153, 0.15);
+}
+
+.dark .p-menubar .p-menuitem-link {
+    color: var(--text-primary);
+}
+
+.dark .p-menubar .p-menuitem-link:hover {
+    background: rgba(236, 72, 153, 0.2);
+    color: var(--pink-primary);
+    border-radius: 8px;
+}
+
+.dark .p-menubar .p-menuitem-link:focus {
+    background: rgba(236, 72, 153, 0.25);
+    color: var(--pink-primary);
+}
+
+.dark .p-button.p-button-outlined {
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark .p-button.p-button-outlined:hover {
+    background: rgba(236, 72, 153, 0.15);
+    border-color: var(--pink-primary);
+    color: var(--pink-primary);
+}
+
+/* Dark mode para botões primários */
+.dark .p-button.p-button-primary {
+    background: var(--pink-gradient);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+}
+
+.dark .p-button.p-button-primary:hover {
+    background: linear-gradient(135deg, var(--fiap-pink-600), var(--fiap-pink-800));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+/* Dark mode para progress bar */
+.dark .p-progressbar .p-progressbar-value {
+    background: var(--pink-gradient);
+}
+
+/* Dark mode para tags */
+.dark .p-tag.p-tag-primary {
+    background: var(--pink-gradient);
+    color: white;
+}
+
+/* Dark mode para scrollbar */
+.dark ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* Pink theme enhancements - Light Mode */
+.p-button.p-button-primary {
+    background: var(--pink-gradient);
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+.p-button.p-button-primary:hover {
+    background: linear-gradient(135deg, var(--fiap-pink-600), var(--fiap-pink-800));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+}
+
+.p-menubar {
+    background: linear-gradient(90deg, var(--fiap-pink-50), var(--fiap-pink-100));
+    border-bottom: 3px solid var(--pink-primary);
+    box-shadow: 0 2px 10px rgba(233, 30, 99, 0.1);
+}
+
+.p-menubar .p-menuitem-link:hover {
+    background: var(--fiap-pink-200);
+    color: var(--fiap-pink-800);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.p-menubar .p-menuitem-link:focus {
+    background: var(--fiap-pink-300);
+    color: var(--fiap-pink-900);
+}
+
+.p-inputtext:focus {
+    border-color: var(--pink-primary);
+    box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+    transition: all 0.3s ease;
+}
+
+.p-card {
+    border-left: 4px solid var(--pink-primary);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.p-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.15);
+}
+
+/* Progress bar with pink theme */
+.p-progressbar .p-progressbar-value {
+    background: var(--pink-gradient);
+    border-radius: 4px;
+}
+
+/* Tag with pink theme */
+.p-tag.p-tag-primary {
+    background: var(--pink-gradient);
+    color: white;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 4px 12px;
+}
+
+/* Button variations */
+.p-button.p-button-outlined.p-button-primary {
+    border: 2px solid var(--pink-primary);
+    color: var(--pink-primary);
+    background: transparent;
+}
+
+.p-button.p-button-outlined.p-button-primary:hover {
+    background: var(--pink-primary);
+    color: white;
+    transform: translateY(-1px);
+}
