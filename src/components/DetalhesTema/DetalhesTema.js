@@ -1,4 +1,6 @@
 import { api } from "../../services/api.js";
+import websocketService from "../../services/websocket.js";
+import moment from 'moment';
 
 export default {
     name: "DetalhesTema",
@@ -16,6 +18,7 @@ export default {
             percentual: 0,
             editando: false,
             salvando: false,
+            alterandoStatus: false,
             form: {
                 nome: "",
                 descricao: "",
@@ -25,9 +28,49 @@ export default {
         };
     },
     async mounted() {
+        // Conectar ao WebSocket
+        websocketService.connect();
+        
+        // Configurar listeners do WebSocket
+        this.setupWebSocketListeners();
+        
         await this.carregarDados();
     },
+    beforeUnmount() {
+        // Remover listeners do WebSocket
+        this.removeWebSocketListeners();
+    },
     methods: {
+        setupWebSocketListeners() {
+            // Listener para quando um voto é registrado
+            websocketService.on('votoRegistrado', this.handleVotoRegistrado);
+            
+            // Listener para quando um tema é atualizado
+            websocketService.on('temaAtualizado', this.handleTemaAtualizado);
+        },
+        
+        removeWebSocketListeners() {
+            websocketService.off('votoRegistrado', this.handleVotoRegistrado);
+            websocketService.off('temaAtualizado', this.handleTemaAtualizado);
+        },
+        
+        // Handlers do WebSocket
+        handleVotoRegistrado(data) {
+            console.log('🗳️ Voto registrado via WebSocket:', data);
+            // Atualizar dados se for do tema atual
+            if (data.idTema == this.tema.id) {
+                this.carregarDados();
+            }
+        },
+        
+        handleTemaAtualizado(temaAtualizado) {
+            console.log('✏️ Tema atualizado via WebSocket:', temaAtualizado);
+            if (temaAtualizado.id === this.tema.id) {
+                // Atualizar o tema local
+                Object.assign(this.tema, temaAtualizado);
+            }
+        },
+        
         async carregarDados() {
             try {
                 // Carregar total de votos
@@ -36,7 +79,7 @@ export default {
                     this.totalVotos = totalResponse.data[0].total;
                 }
 
-                // Carregar últimos votos
+                // Carregar todos os votos
                 const votosResponse = await api.getVotos(this.tema.id);
                 this.ultimosVotos = votosResponse.data || [];
 
@@ -53,6 +96,51 @@ export default {
                     detail: "Erro ao carregar dados do tema",
                     life: 3000,
                 });
+            }
+        },
+
+        async toggleStatusTema() {
+            try {
+                this.alterandoStatus = true;
+                
+                if (this.tema.ativo) {
+                    // Desativar tema
+                    await api.inativarTema(this.tema.id);
+                    this.tema.ativo = false;
+                    
+                    this.$toast.add({
+                        severity: "warn",
+                        summary: "Tema Desativado",
+                        detail: "O tema foi desativado com sucesso",
+                        life: 3000,
+                    });
+                } else {
+                    // Ativar tema
+                    await api.ativarTema(this.tema.id);
+                    this.tema.ativo = true;
+                    
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Tema Ativado",
+                        detail: "O tema foi ativado com sucesso",
+                        life: 3000,
+                    });
+                }
+                
+                // Emitir evento para atualizar na lista
+                this.$emit("tema-atualizado", this.tema);
+                
+            } catch (error) {
+                const message =
+                    error.response?.data?.message || "Erro ao alterar status do tema";
+                this.$toast.add({
+                    severity: "error",
+                    summary: "Erro",
+                    detail: message,
+                    life: 3000,
+                });
+            } finally {
+                this.alterandoStatus = false;
             }
         },
 
@@ -183,14 +271,7 @@ export default {
         },
 
         formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString("pt-BR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-            });
+            return moment(dateString).format("DD/MM/YY [às] HH[h]mm");
         },
     },
 };

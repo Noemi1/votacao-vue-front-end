@@ -47,7 +47,7 @@
             <div
                 v-for="tema in temasAtivos"
                 :key="tema.id"
-                class="col-6 sm:col-6 md:col-4 lg:col-4 xl:col-3"
+                class="col-6 sm:col-6 md:col-6 lg:col-4 xl:col-3"
             >
                 <Card class="h-full hover:shadow-3 transition-all duration-300">
                     <template #header>

@@ -94,7 +94,7 @@ class WebSocketService {
 
             this.socket.on('votoRegistrado', (data) => {
                 console.log('🗳️ Voto registrado:', data);
-                this.emit('votoRegistrado', data);
+                // this.emit('votoRegistrado', data);
             });
 
         } catch (error) {

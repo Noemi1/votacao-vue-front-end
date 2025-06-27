@@ -1,7 +1,6 @@
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 @import "tailwindcss";
-@import "tailwindcss-primeui";
 
 /* Variáveis CSS para temas */
 :root {
@@ -275,4 +274,13 @@ html[data-theme="light"] #app {
     background: var(--pink-primary);
     color: white;
     transform: translateY(-1px);
+}
+.p-card-body { 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.p-card-footer {
+    margin-top: auto;
+    padding-top: 10px;
 }

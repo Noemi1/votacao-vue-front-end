@@ -20,6 +20,7 @@ import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Dialog from 'primevue/dialog'
 import Divider from 'primevue/divider'
+import Fluid from 'primevue/fluid';
 import Image from 'primevue/image'
 import InputText from 'primevue/inputtext'
 import Menubar from 'primevue/menubar';
@@ -80,6 +81,7 @@ app.component('Column', Column)
 app.component('DataTable', DataTable)
 app.component('Dialog', Dialog)
 app.component('Divider', Divider)
+app.component('Fluid', Fluid)
 app.component('Image', Image)
 app.component('InputText', InputText)
 app.component('Menubar', Menubar)

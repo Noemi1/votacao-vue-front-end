@@ -151,19 +151,20 @@
         class="p-fluid theme-dialog"
         :style="{ width: '600px' }"
     >
-        <div class="grid">
-            <div class="col-12">
+        <div class="formgrid grid">
+            <div class="field col-12">
                 <label for="nome" class="font-semibold mb-2">Nome do Tema</label>
                 <InputText
                     id="nome"
                     v-model="form.nome"
                     placeholder="Digite o nome do tema"
                     :class="{ 'p-invalid': errors.nome }"
+                    fluid 
                 />
                 <small v-if="errors.nome" class="p-error">{{ errors.nome }}</small>
             </div>
 
-            <div class="col-12">
+            <div class="field col-12">
                 <label for="descricao" class="font-semibold mb-2">Descrição</label>
                 <Textarea
                     id="descricao"
@@ -171,11 +172,12 @@
                     rows="4"
                     placeholder="Digite a descrição do tema"
                     :class="{ 'p-invalid': errors.descricao }"
+                    fluid 
                 />
                 <small v-if="errors.descricao" class="p-error">{{ errors.descricao }}</small>
             </div>
 
-            <div class="col-12">
+            <div class="field col-12">
                 <label for="foto" class="font-semibold mb-2">URL da Foto</label>
                 <InputText
                     id="foto"
@@ -186,7 +188,7 @@
                 <small v-if="errors.foto" class="p-error">{{ errors.foto }}</small>
             </div>
 
-            <div class="col-12" v-if="form.foto">
+            <div class="field col-12" v-if="form.foto">
                 <label class="font-semibold mb-2">Preview da Foto</label>
                 <div class="border-round overflow-hidden" style="max-width: 200px">
                     <Image

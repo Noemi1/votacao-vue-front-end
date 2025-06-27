@@ -213,12 +213,6 @@ export default {
                     tema.totalVotos = response.data[0].total;
                 }
 
-                // Emitir evento WebSocket para notificar outros clientes
-                websocketService.emitToServer('votoRegistrado', {
-                    idTema: tema.id,
-                    totalVotos: tema.totalVotos
-                });
-
                 this.$emit("votar", tema);
             } catch (error) {
                 const message =

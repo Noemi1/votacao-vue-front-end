@@ -1,33 +1,45 @@
 <div>
     <!-- Header -->
     <div class="mb-4">
-        <button
-            label="Voltar"
-            icon="pi pi-arrow-left"
-            text
-            @click="$emit('voltar')"
-            class="mb-3"
-        />
-        <div class="flex align-items-center justify-content-between">
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                {{ editando ? 'Editar Tema' : 'Detalhes do Tema' }}
-            </h2>
+        <div class="flex align-items-center justify-content-between mb-3">
+            <div class="flex align-items-center gap-3">
+                <Button
+                    label="← Voltar"
+                    icon="pi pi-arrow-left"
+                    @click="$emit('voltar')"
+                    severity="secondary"
+                    outlined
+                    class="font-semibold"
+                />
+                <h2 class="text-2xl font-bold text-gray-800 m-0">
+                    {{ editando ? 'Editar Tema' : 'Detalhes do Tema' }}
+                </h2>
+            </div>
             <div class="flex gap-2">
-                <button
+                <Button
+                    v-if="!editando"
+                    :label="tema.ativo ? 'Desativar Tema' : 'Ativar Tema'"
+                    :icon="tema.ativo ? 'pi pi-ban' : 'pi pi-check'"
+                    :severity="tema.ativo ? 'danger' : 'success'"
+                    @click="toggleStatusTema"
+                    :loading="alterandoStatus"
+                    outlined
+                />
+                <Button
                     v-if="!editando"
                     label="Editar"
                     icon="pi pi-pencil"
                     @click="iniciarEdicao"
                     severity="secondary"
                 />
-                <button
+                <Button
                     v-if="editando"
                     label="Cancelar"
                     icon="pi pi-times"
                     text
                     @click="cancelarEdicao"
                 />
-                <button
+                <Button
                     v-if="editando"
                     label="Salvar"
                     icon="pi pi-check"
@@ -44,7 +56,7 @@
             <Card>
                 <template #header>
                     <div class="relative">
-                        <image
+                        <Image
                             :src="editando ? form.foto : tema.foto"
                             :alt="editando ? form.nome : tema.nome"
                             width="100%"
@@ -53,9 +65,15 @@
                             class="w-full border-round-top"
                         />
                         <Tag
-                            v-if="!editando && tema.inativado"
+                            v-if="!editando && !tema.ativo"
                             value="Inativo"
                             severity="danger"
+                            class="absolute top-0 right-0 m-3"
+                        />
+                        <Tag
+                            v-if="!editando && tema.ativo"
+                            value="Ativo"
+                            severity="success"
                             class="absolute top-0 right-0 m-3"
                         />
                     </div>
@@ -69,11 +87,9 @@
                     </div>
                     <div v-else>
                         <div class="mb-3">
-                            <label
-                                for="nome"
-                                class="block text-sm font-semibold text-gray-700 mb-2"
-                                >Nome do Tema</label
-                            >
+                            <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Nome do Tema
+                            </label>
                             <InputText
                                 id="nome"
                                 v-model="form.nome"
@@ -81,9 +97,9 @@
                                 class="w-full"
                                 :class="{ 'p-invalid': errors.nome }"
                             />
-                            <small v-if="errors.nome" class="p-error"
-                                >{{ errors.nome }}</small
-                            >
+                            <small v-if="errors.nome" class="p-error">
+                                {{ errors.nome }}
+                            </small>
                         </div>
                     </div>
                 </template>
@@ -91,9 +107,7 @@
                 <template #content>
                     <div v-if="!editando">
                         <div class="mb-4">
-                            <h3
-                                class="text-lg font-semibold text-gray-700 mb-2"
-                            >
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">
                                 Descrição
                             </h3>
                             <p class="text-gray-600 line-height-3">
@@ -103,11 +117,9 @@
                     </div>
                     <div v-else>
                         <div class="mb-4">
-                            <label
-                                for="descricao"
-                                class="block text-sm font-semibold text-gray-700 mb-2"
-                                >Descrição</label
-                            >
+                            <label for="descricao" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Descrição
+                            </label>
                             <textarea
                                 id="descricao"
                                 v-model="form.descricao"
@@ -115,18 +127,16 @@
                                 rows="4"
                                 class="w-full"
                                 :class="{ 'p-invalid': errors.descricao }"
-                            />
-                            <small v-if="errors.descricao" class="p-error"
-                                >{{ errors.descricao }}</small
-                            >
+                            ></textarea>
+                            <small v-if="errors.descricao" class="p-error">
+                                {{ errors.descricao }}
+                            </small>
                         </div>
 
                         <div class="mb-4">
-                            <label
-                                for="foto"
-                                class="block text-sm font-semibold text-gray-700 mb-2"
-                                >URL da Imagem</label
-                            >
+                            <label for="foto" class="block text-sm font-semibold text-gray-700 mb-2">
+                                URL da Imagem
+                            </label>
                             <InputText
                                 id="foto"
                                 v-model="form.foto"
@@ -134,9 +144,9 @@
                                 class="w-full"
                                 :class="{ 'p-invalid': errors.foto }"
                             />
-                            <small v-if="errors.foto" class="p-error"
-                                >{{ errors.foto }}</small
-                            >
+                            <small v-if="errors.foto" class="p-error">
+                                {{ errors.foto }}
+                            </small>
                         </div>
                     </div>
 
@@ -147,12 +157,8 @@
                             <div class="flex align-items-center mb-3">
                                 <i class="pi pi-calendar text-primary mr-2"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500">
-                                        Criado em
-                                    </div>
-                                    <div class="font-semibold">
-                                        {{ formatDate(tema.created_at) }}
-                                    </div>
+                                    <div class="text-sm text-gray-500">Criado em</div>
+                                    <div class="font-semibold">{{ formatDate(tema.dataCriacao) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -161,39 +167,28 @@
                             <div class="flex align-items-center mb-3">
                                 <i class="pi pi-users text-primary mr-2"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500">
-                                        Total de votos
-                                    </div>
-                                    <div class="font-semibold text-xl">
-                                        {{ totalVotos }}
-                                    </div>
+                                    <div class="text-sm text-gray-500">Total de votos</div>
+                                    <div class="font-semibold text-xl">{{ totalVotos }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div v-if="!editando && tema.inativado" class="mt-4">
+                    <div v-if="!editando && !tema.ativo" class="mt-4">
                         <div class="flex align-items-center mb-3">
                             <i class="pi pi-ban text-red-500 mr-2"></i>
                             <div>
-                                <div class="text-sm text-gray-500">
-                                    Inativado em
-                                </div>
-                                <div class="font-semibold text-red-600">
-                                    {{ formatDate(tema.inativado_em) }}
-                                </div>
+                                <div class="text-sm text-gray-500">Status</div>
+                                <div class="font-semibold text-red-600">Tema Inativo</div>
                             </div>
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            IP de inativação: {{ tema.inativado_por_ip }}
                         </div>
                     </div>
                 </template>
 
                 <template #footer>
                     <div class="flex gap-3">
-                        <button
-                            v-if="!editando && !tema.inativado"
+                        <Button
+                            v-if="!editando && tema.ativo"
                             label="Votar neste tema"
                             icon="pi pi-check"
                             size="large"
@@ -201,8 +196,8 @@
                             :loading="votando"
                             class="flex-1"
                         />
-                        <button
-                            v-if="!editando && tema.inativado"
+                        <Button
+                            v-if="!editando && !tema.ativo"
                             label="Tema Inativo"
                             icon="pi pi-ban"
                             severity="secondary"
@@ -214,12 +209,12 @@
             </Card>
         </div>
 
-        <!-- Estatísticas -->
+        <!-- Estatísticas e Lista de Votos -->
         <div class="col-12 lg:col-4">
             <Card>
                 <template #title>
                     <h3 class="text-xl font-semibold text-gray-800 mb-3">
-                        Estatísticas
+                        Estatísticas e Votos
                     </h3>
                 </template>
 
@@ -235,13 +230,11 @@
                             </div>
                         </div>
 
-                        <!-- Progresso (se houver outros temas para comparação) -->
+                        <!-- Progresso -->
                         <div v-if="percentual > 0" class="space-y-2">
                             <div class="flex justify-content-between text-sm">
                                 <span class="text-gray-600">Percentual</span>
-                                <span class="font-semibold"
-                                    >{{ percentual.toFixed(1) }}%</span
-                                >
+                                <span class="font-semibold">{{ percentual.toFixed(1) }}%</span>
                             </div>
                             <ProgressBar
                                 :value="percentual"
@@ -250,29 +243,40 @@
                             />
                         </div>
 
-                        <!-- Últimos Votos -->
+                        <!-- Lista de Votos -->
                         <div v-if="ultimosVotos.length > 0">
                             <h4 class="font-semibold text-gray-700 mb-2">
-                                Últimos Votos
+                                Últimos Votos ({{ ultimosVotos.length }})
                             </h4>
-                            <div class="space-y-2">
+                            <div class="space-y-2 max-h-64 overflow-y-auto">
                                 <div
-                                    v-for="voto in ultimosVotos.slice(0, 5)"
+                                    v-for="voto in ultimosVotos"
                                     :key="voto.id"
-                                    class="flex align-items-center justify-content-between p-2 bg-gray-50 border-round"
+                                    class="flex align-items-center justify-content-between p-3 bg-gray-50 border-round hover:bg-gray-100 transition-colors"
                                 >
                                     <div class="flex align-items-center">
-                                        <i
-                                            class="pi pi-user text-gray-400 mr-2"
-                                        ></i>
-                                        <span class="text-sm text-gray-600"
-                                            >{{ voto.ip }}</span
-                                        >
+                                        <i class="pi pi-user text-gray-400 mr-2"></i>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-700">
+                                                IP: {{ voto.ip }}
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ formatDate(voto.dataHora) }}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span class="text-xs text-gray-500"
-                                        >{{ formatDate(voto.created_at) }}</span
-                                    >
+                                    <div class="text-xs text-gray-400">
+                                        #{{ voto.id }}
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem quando não há votos -->
+                        <div v-else class="text-center p-4 bg-gray-50 border-round">
+                            <i class="pi pi-users text-gray-400 text-2xl mb-2"></i>
+                            <div class="text-sm text-gray-500">
+                                Nenhum voto registrado ainda
                             </div>
                         </div>
                     </div>

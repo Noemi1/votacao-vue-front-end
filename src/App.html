@@ -27,13 +27,13 @@
                     <div class="flex items-center gap-1">
                         <div 
                             :class="[
-                                'w-2 h-2 rounded-full',
-                                websocketService?.connected ? 'bg-green-500' : 'bg-red-500'
+                                'p-1 border-circle flex-none',
+                                websocketService?.connected ? 'bg-green-500 animate-pulse' : 'bg-red-500 animate-pulse'
                             ]"
                             :title="websocketService?.connected ? 'WebSocket Conectado' : 'WebSocket Desconectado'"
                         ></div>
-                        <span class="text-xs ">
-                            {{ websocketService?.connected ? 'Light Mode' : 'Dark Mode' }}
+                        <span class="text-xs whitespace-nowrap">
+                            {{ websocketService?.connected ? 'WebSocket Conectado' : 'WebSocket Desconectado' }}
                         </span>
                     </div>
                     
