@@ -3,8 +3,7 @@
 - **Vue.js**: Framework Front-end
 - **Primevue, 
     Primeflex, 
-    Primeicons,
-    Tailwind:** bibliotecas de componentes e estilos
+    Primeicons:** bibliotecas de componentes e estilos
 - **Websocket**: Socket.io-client
 - **Axios**: Requisições HTTP
 

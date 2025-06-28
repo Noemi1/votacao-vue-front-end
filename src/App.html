@@ -1,38 +1,39 @@
-<div id="app" class="min-h-screen ">
+<div id="app" class="min-h-screen">
     <Toast />
     <!-- Header -->
     
-    <div class="card shadow-md">
+    <div class="card shadow-2">
         <Menubar :model="items">
             <template #start>
                 <img 
                     src="./assets/logo-fiap.png" 
                     alt="Logo FIAP" 
-                    class="h-8 w-auto"
+                    class="mr-3"
+                    style="height: 24px; width: auto;"
                 />
             </template>
             <template #item="{ item, props, hasSubmenu, root }">
-                <a v-ripple class="flex items-center px-4 py-2 rounded-lg hover:bg-fiap-pink-200 transition-colors" v-bind="props.action">
-                    <span >{{ item.label }}</span>
+                <a v-ripple class="flex align-items-center px-4 py-2 border-round hover:surface-200 transition-colors" v-bind="props.action">
+                    <span>{{ item.label }}</span>
                     <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-2': root }" :value="item.badge" />
-                    <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis  text-xs p-1">
+                    <span v-if="item.shortcut" class="ml-auto border border-surface border-round surface-100 text-xs p-1">
                         {{ item.shortcut }}
                     </span>
                     <i v-if="hasSubmenu" :class="['pi pi-angle-down ml-auto', { 'pi-angle-down': root, 'pi-angle-right': !root }]"></i>
                 </a>
             </template>
             <template #end>
-                <div class="flex items-center gap-2">
+                <div class="flex align-items-center gap-2">
                     <!-- WebSocket Status Indicator -->
-                    <div class="flex items-center gap-1">
+                    <div class="flex align-items-center gap-1">
                         <div 
                             :class="[
                                 'p-1 border-circle flex-none',
-                                websocketService?.connected ? 'bg-green-500 animate-pulse' : 'bg-red-500 animate-pulse'
+                                websocketService?.connected ? 'bg-green-500' : 'bg-red-500'
                             ]"
                             :title="websocketService?.connected ? 'WebSocket Conectado' : 'WebSocket Desconectado'"
                         ></div>
-                        <span class="text-xs whitespace-nowrap">
+                        <span class="text-xs text-nowrap">
                             {{ websocketService?.connected ? 'WebSocket Conectado' : 'WebSocket Desconectado' }}
                         </span>
                     </div>
@@ -55,14 +56,14 @@
     <!-- Main Content -->
     <div class="container mx-auto p-6 min-h-screen">
         <!-- Lista de Temas -->
-        <div v-if="currentView === 'temas'" class="space-y-6">
+        <div v-if="currentView === 'temas'" class="mb-6">
             <ListaTemas
                 ref="listaTemas"
                 @ver-detalhes="handleVerDetalhes"
             />
         </div>
         <!-- Detalhes do Tema -->
-        <div v-if="currentView === 'detalhes'" class="space-y-6">
+        <div v-if="currentView === 'detalhes'" class="mb-6">
             <DetalhesTema
                 :tema="selectedTema"
                 @voltar="currentView = 'temas'"
@@ -70,7 +71,7 @@
             />
         </div>
         <!-- Painel Administracao -->
-        <div v-if="currentView === 'admin'" class="space-y-6">
+        <div v-if="currentView === 'admin'" class="mb-6">
             <PainelAdministracao @voltar="currentView = 'temas'" />
         </div>
     </div>

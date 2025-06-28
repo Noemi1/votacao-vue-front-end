@@ -4,7 +4,7 @@
         <div class="mb-4">
             <div class="flex align-items-center justify-content-between">
                 <div>
-                    <h2 class="text-2xl font-bold  mb-2">
+                    <h2 class="text-2xl font-bold mb-2">
                         Temas para Votação
                     </h2>
                     <p class="">
@@ -25,7 +25,7 @@
             <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
         </div>
         <!-- Error -->
-        <div v-else-if="error" class="p-4 bg-red-10 border-round border-red-200">
+        <div v-else-if="error" class="p-4 surface-100 border-round border-red-200">
             <div class="flex align-items-center">
                 <i class="pi pi-exclamation-triangle text-red-500 mr-2"></i>
                 <span class="text-red-700">{{ error }}</span>
@@ -36,8 +36,8 @@
             v-else-if="!loading && !error && temasAtivos.length === 0"
             class="text-center p-6"
         >
-            <i class="pi pi-inbox text-6xl  mb-3"></i>
-            <h3 class="text-xl  mb-2">Nenhum tema disponível</h3>
+            <i class="pi pi-inbox text-6xl mb-3"></i>
+            <h3 class="text-xl mb-2">Nenhum tema disponível</h3>
             <p class="">
                 Não há temas ativos para votação no momento.
             </p>
@@ -47,15 +47,16 @@
             <div
                 v-for="tema in temasAtivos"
                 :key="tema.id"
-                class="col-6 sm:col-6 md:col-6 lg:col-4 xl:col-4 cursor-pointer"
+                class="col-6 sm:col-6 md:col-6 lg:col-4 xl:col-4"
             >
-                <Card class="h-full hover:shadow-3 transition-all duration-300">
+                <Card class="h-full">
                     <template #header>
                         <div class="relative">
                             <img 
                                 :src="getValidImageUrl(tema.foto)" 
                                 :alt="tema.nome"
-                                class="w-full h-48 object-cover border-round-top"
+                                class="w-full border-round-top"
+                                style="height: 192px; object-fit: cover;"
                                 @error="handleImageError"
                             />
                             <div class="absolute top-2 right-2">
@@ -68,13 +69,13 @@
                         </div>
                     </template>
                     <template #title>
-                        <h3 class="text-xl font-semibold  mb-2 ">
+                        <h3 class="text-xl font-semibold mb-2">
                             {{ tema.nome }}
                         </h3>
                     </template>
                     <template #content>
                         <div class="flex flex-column h-full">
-                            <p class=" mb-3 line-height-1-5">
+                            <p class="mb-3 line-height-1-5">
                                 {{ truncateDescription(tema.descricao, 120) }}
                             </p>
                             <div class="mt-auto flex align-items-center justify-content-between text-sm">
