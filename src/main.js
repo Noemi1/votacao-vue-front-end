@@ -32,15 +32,20 @@ import ToastService from 'primevue/toastservice'
 import Toolbar from 'primevue/toolbar';
 
 import { definePreset } from '@primeuix/themes';
-import PrimeUI from 'tailwindcss-primeui';
-
 
 import axios from 'axios'
 
 const app = createApp(App)
 
-// Configurar axios
-axios.defaults.baseURL = 'http://localhost:3000'
+// Configurar axios com URL base dinâmica
+const isDevelopment = process.env.NODE_ENV === 'development';
+const apiBaseURL = isDevelopment 
+  ? 'http://localhost:3000' 
+  : 'https://votacao-back-end-ewhybnghhkegb0e0.canadacentral-01.azurewebsites.net';
+
+axios.defaults.baseURL = apiBaseURL;
+console.log('🌐 API Base URL:', apiBaseURL);
+
 const MyPreset = definePreset(Aura, {
     semantic: {
         primary: {
@@ -58,6 +63,7 @@ const MyPreset = definePreset(Aura, {
         }
     }
 });
+
 // PrimeVue com tema personalizado rosa/vermelho
 app.use(PrimeVue, { 
   ripple: true, 
@@ -65,8 +71,7 @@ app.use(PrimeVue, {
     preset: MyPreset,
     options: {
       darkModeSelector: '.dark',
-      cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities',
-      primeui: PrimeUI
+      cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
     },
   }
 })

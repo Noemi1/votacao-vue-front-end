@@ -1,6 +1,6 @@
+/* PrimeVue CSS - Importações */
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
-@import "tailwindcss";
 
 /* Variáveis CSS para temas */
 :root {

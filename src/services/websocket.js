@@ -18,7 +18,15 @@ class WebSocketService {
         console.log('🔌 Tentando conectar ao WebSocket...');
         
         try {
-            this.socket = io('http://localhost:3000', {
+            // URL dinâmica baseada no ambiente
+            const isDevelopment = process.env.NODE_ENV === 'development';
+            const wsUrl = isDevelopment 
+                ? 'http://localhost:3000' 
+                : 'https://votacao-back-end-ewhybnghhkegb0e0.canadacentral-01.azurewebsites.net';
+            
+            console.log('🔌 Conectando ao WebSocket:', wsUrl);
+            
+            this.socket = io(wsUrl, {
                 transports: ['websocket', 'polling'],
                 timeout: 10000,
                 reconnection: true,
